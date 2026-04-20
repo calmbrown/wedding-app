@@ -108,6 +108,7 @@ function DDay() {
 
 function RsvpForm() {
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [attending, setAttending] = useState<"yes" | "no" | "">("");
   const [guests, setGuests] = useState(1);
   const [message, setMessage] = useState("");
@@ -120,7 +121,7 @@ function RsvpForm() {
     try {
       await fetch(SCRIPT_URL, {
         method: "POST",
-        body: JSON.stringify({ name, attending, guests: attending === "yes" ? guests : 0, message }),
+        body: JSON.stringify({ name, phone, attending, guests: attending === "yes" ? guests : 0, message }),
       });
       setStatus("done");
     } catch {
@@ -148,6 +149,17 @@ function RsvpForm() {
           onChange={(e) => setName(e.target.value)}
           placeholder="이름을 입력해주세요"
           required
+          className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-700 placeholder:text-stone-300 outline-none focus:border-stone-400"
+        />
+      </div>
+
+      <div>
+        <label className="text-[10px] text-stone-400 tracking-wider block mb-1.5">연락처</label>
+        <input
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="010-0000-0000"
           className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-700 placeholder:text-stone-300 outline-none focus:border-stone-400"
         />
       </div>
