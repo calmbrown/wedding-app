@@ -334,34 +334,6 @@ export default function WeddingPage() {
                 </div>
               ))}
             </div>
-
-            {/* 축의금 계좌 */}
-            <div className="space-y-3 pt-2">
-              <p className="text-[10px] tracking-[0.35em] text-stone-400 text-center">ACCOUNT</p>
-              {[
-                { label: "신랑", name: "김태민", bank: "카카오뱅크", account: "3333-16-7532049" },
-                { label: "신랑 부", name: "김학정", bank: "국민은행", account: "계좌번호 준비 중" },
-                { label: "신랑 모", name: "유영임", bank: "국민은행", account: "계좌번호 준비 중" },
-                { label: "신부", name: "김지현", bank: "카카오뱅크", account: "3333-25-5432228" },
-                { label: "신부 부", name: "김용섭", bank: "국민은행", account: "계좌번호 준비 중" },
-                { label: "신부 모", name: "강외숙", bank: "국민은행", account: "계좌번호 준비 중" },
-              ].map(({ label, name, bank, account }) => (
-                <div key={label} className="flex items-center justify-between border border-stone-100 rounded-2xl px-5 py-3.5">
-                  <div>
-                    <p className="text-[10px] text-stone-400 tracking-wider">{label} · {name}</p>
-                    <p className="text-sm text-stone-600 font-light mt-0.5">{bank}  {account}</p>
-                  </div>
-                  {!account.includes("준비") && (
-                    <button
-                      onClick={() => copyToClipboard(account, account)}
-                      className="text-[10px] text-stone-400 border border-stone-200 rounded-lg px-3 py-1.5 hover:bg-stone-50 transition-colors whitespace-nowrap tracking-wide"
-                    >
-                      {copied === account ? "✓" : "복사"}
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
           </div>
         </FadeSection>
 
