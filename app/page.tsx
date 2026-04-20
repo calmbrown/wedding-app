@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Script from "next/script";
 
 const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
 
@@ -109,6 +110,7 @@ function DDay() {
 function RsvpForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [side, setSide] = useState<"groom" | "bride" | "">("");
   const [attending, setAttending] = useState<"yes" | "no" | "">("");
   const [guests, setGuests] = useState(1);
   const [message, setMessage] = useState("");
@@ -116,12 +118,12 @@ function RsvpForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !attending) return;
+    if (!name || !side || !attending) return;
     setStatus("loading");
     try {
       await fetch(SCRIPT_URL, {
         method: "POST",
-        body: JSON.stringify({ name, phone, attending, guests: attending === "yes" ? guests : 0, message }),
+        body: JSON.stringify({ name, phone, side: side === "groom" ? "신랑측" : "신부측", attending, guests: attending === "yes" ? guests : 0, message }),
       });
       setStatus("done");
     } catch {
@@ -167,6 +169,26 @@ function RsvpForm() {
           placeholder="010-0000-0000"
           className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-700 placeholder:text-stone-300 outline-none focus:border-stone-400"
         />
+      </div>
+
+      <div>
+        <label className="text-[10px] text-stone-400 tracking-wider block mb-1.5">구분</label>
+        <div className="grid grid-cols-2 gap-2">
+          {(["groom", "bride"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setSide(v)}
+              className={`py-3 rounded-xl text-sm border transition-colors ${
+                side === v
+                  ? "bg-stone-800 text-white border-stone-800"
+                  : "bg-white text-stone-500 border-stone-200 hover:bg-stone-50"
+              }`}
+            >
+              {v === "groom" ? "신랑측" : "신부측"}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div>
@@ -469,6 +491,50 @@ export default function WeddingPage() {
           </div>
         </FadeSection>
 
+        {/* ── 카카오 공유 ── */}
+        <div className="pb-10 flex justify-center">
+          <button
+            onClick={() => {
+              const kakao = (window as any).Kakao;
+              if (!kakao?.isInitialized()) return;
+              kakao.Share.sendDefault({
+                objectType: "feed",
+                content: {
+                  title: "김태민 ♥ 김지현 결혼합니다.",
+                  description: "2026년 6월 21일 (일) 오후 3시 30분\n로프트가든344",
+                  imageUrl: "https://calmbrown.github.io/wedding-app/og-image.jpeg",
+                  link: {
+                    mobileWebUrl: "https://calmbrown.github.io/wedding-app",
+                    webUrl: "https://calmbrown.github.io/wedding-app",
+                  },
+                },
+                buttons: [
+                  {
+                    title: "청첩장 보기",
+                    link: {
+                      mobileWebUrl: "https://calmbrown.github.io/wedding-app",
+                      webUrl: "https://calmbrown.github.io/wedding-app",
+                    },
+                  },
+                  {
+                    title: "위치 안내",
+                    link: {
+                      mobileWebUrl: "https://map.kakao.com/link/search/서울 양천구 오목로 344 청학빌딩",
+                      webUrl: "https://map.kakao.com/link/search/서울 양천구 오목로 344 청학빌딩",
+                    },
+                  },
+                ],
+              });
+            }}
+            className="flex items-center gap-2 bg-[#FEE500] text-[#3C1E1E] px-6 py-3 rounded-2xl text-sm font-medium hover:bg-yellow-300 transition-colors"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.632 1.598 4.942 4 6.318V21l3.5-2.5c.822.13 1.662.2 2.5.2 5.523 0 10-3.477 10-7.7C22 6.477 17.523 3 12 3z"/>
+            </svg>
+            카카오톡 공유
+          </button>
+        </div>
+
         {/* 푸터 */}
         <div className="text-center pb-12 text-[10px] text-stone-300 font-light tracking-[0.2em]">
           <p>김태민  ♥  김지현</p>
@@ -477,6 +543,17 @@ export default function WeddingPage() {
 
       </div>
 
+      <Script
+        src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
+        integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
+        crossOrigin="anonymous"
+        onLoad={() => {
+          const kakao = (window as any).Kakao;
+          if (kakao && !kakao.isInitialized()) {
+            kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY);
+          }
+        }}
+      />
     </main>
   );
 }

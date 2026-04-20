@@ -33,6 +33,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_SCRIPT_URL: ${{ secrets.NEXT_PUBLIC_SCRIPT_URL }}
+          NEXT_PUBLIC_KAKAO_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
