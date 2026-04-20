@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
+const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
+
 const PHOTOS = Array.from({ length: 30 }, (_, i) => {
   const num = String(i + 1).padStart(3, "0");
   const timestamps: Record<string, string> = {
@@ -37,7 +39,7 @@ const PHOTOS = Array.from({ length: 30 }, (_, i) => {
     "029": "2026-04-20-14-01-56",
     "030": "2026-04-20-14-01-56",
   };
-  return `/KakaoTalk_Photo_${timestamps[num]} ${num}.jpeg`;
+  return `${BASE_PATH}/KakaoTalk_Photo_${timestamps[num]} ${num}.jpeg`;
 });
 
 function useInView(threshold = 0.15) {
