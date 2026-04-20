@@ -158,7 +158,12 @@ function RsvpForm() {
         <input
           type="tel"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => {
+            const digits = e.target.value.replace(/\D/g, "").slice(0, 11);
+            if (digits.length <= 3) setPhone(digits);
+            else if (digits.length <= 7) setPhone(`${digits.slice(0, 3)}-${digits.slice(3)}`);
+            else setPhone(`${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`);
+          }}
           placeholder="010-0000-0000"
           className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-700 placeholder:text-stone-300 outline-none focus:border-stone-400"
         />
@@ -247,7 +252,7 @@ export default function WeddingPage() {
       {/* ── 메인 커버 ── */}
       <section className="relative h-screen flex flex-col items-center justify-end pb-16 overflow-hidden">
         <Image
-          src={PHOTOS[0]}
+          src={PHOTOS[14]}
           alt="커버 사진"
           fill
           className="object-cover"
