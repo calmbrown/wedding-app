@@ -367,7 +367,7 @@ export default function WeddingPage() {
 
         {/* ── 지도 ── */}
         <FadeSection>
-          <div className="space-y-4">
+          <div id="location" className="space-y-4">
             <p className="text-[10px] tracking-[0.35em] text-stone-400 text-center">LOCATION</p>
 
             {/* 약도 */}
@@ -531,7 +531,7 @@ export default function WeddingPage() {
                 objectType: "feed",
                 content: {
                   title: "김태민 ♥ 김지현 결혼합니다.",
-                  description: "2026년 6월 21일 (일) 오후 3시 30분\n로프트가든344",
+                  description: "2026년 6월 21일 (일) 오후 3시 30분 · 로프트가든344",
                   imageUrl: "https://calmbrown.github.io/wedding-app/og-image.jpeg",
                   link: {
                     mobileWebUrl: "https://calmbrown.github.io/wedding-app",
@@ -549,8 +549,8 @@ export default function WeddingPage() {
                   {
                     title: "위치 안내",
                     link: {
-                      mobileWebUrl: "https://map.kakao.com/link/search/서울 양천구 오목로 344 청학빌딩",
-                      webUrl: "https://map.kakao.com/link/search/서울 양천구 오목로 344 청학빌딩",
+                      mobileWebUrl: "https://calmbrown.github.io/wedding-app#location",
+                      webUrl: "https://calmbrown.github.io/wedding-app#location",
                     },
                   },
                 ],
