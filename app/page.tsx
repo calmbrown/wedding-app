@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 
 const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
@@ -261,45 +261,58 @@ function Lightbox({ photos, index, onClose }: {
   onClose: () => void;
 }) {
   const [current, setCurrent] = useState(index);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
+  const [opacity, setOpacity] = useState(1);
   const touchStartY = useRef<number | null>(null);
+  const busy = useRef(false);
+
+  const FADE_OUT = 160;
+  const FADE_IN = 220;
+
+  const dismiss = useCallback(() => {
+    if (busy.current) return;
+    busy.current = true;
+    setOpacity(0);
+    setTimeout(onClose, FADE_OUT);
+  }, [onClose]);
+
+  const goTo = useCallback((next: number) => {
+    if (busy.current) return;
+    if (next < 0 || next >= photos.length) { dismiss(); return; }
+    busy.current = true;
+    setOpacity(0);
+    setTimeout(() => {
+      setCurrent(next);
+      setOpacity(1);
+      busy.current = false;
+    }, FADE_OUT);
+  }, [photos.length, dismiss]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowDown") setCurrent((c) => Math.min(c + 1, photos.length - 1));
-      if (e.key === "ArrowUp") setCurrent((c) => Math.max(c - 1, 0));
+      if (e.key === "Escape") dismiss();
+      if (e.key === "ArrowDown") goTo(current + 1);
+      if (e.key === "ArrowUp") goTo(current - 1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, photos.length]);
+  }, [current, goTo, dismiss]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length !== 1) return;
     touchStartY.current = e.touches[0].clientY;
-    setIsDragging(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (e.touches.length > 1) { e.preventDefault(); return; }
-    if (touchStartY.current === null) return;
-    const dy = e.touches[0].clientY - touchStartY.current;
-    // 저항감: 0.25 배수로 드래그가 무겁게 느껴짐
-    setDragOffset(dy * 0.25);
+    if (e.touches.length > 1) e.preventDefault();
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartY.current === null) return;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
     touchStartY.current = null;
-    setIsDragging(false);
-    setDragOffset(0);
-    if (dy < -90 && current < photos.length - 1) setCurrent((c) => c + 1);
-    else if (dy > 90 && current > 0) setCurrent((c) => c - 1);
+    if (dy < -80) goTo(current + 1);
+    else if (dy > 80) goTo(current - 1);
   };
-
-  const translateY = `calc(${-current * 100}vh + ${dragOffset}px)`;
 
   return (
     <div
@@ -310,7 +323,7 @@ function Lightbox({ photos, index, onClose }: {
       onTouchEnd={handleTouchEnd}
     >
       <button
-        onClick={onClose}
+        onClick={dismiss}
         className="fixed top-4 right-4 z-10 text-white/80 hover:text-white p-2"
         aria-label="닫기"
       >
@@ -319,35 +332,25 @@ function Lightbox({ photos, index, onClose }: {
         </svg>
       </button>
 
-      <div className="fixed bottom-5 left-0 right-0 z-10 text-center text-white/50 text-xs pointer-events-none">
+      <div className="fixed bottom-5 left-0 right-0 z-10 text-center text-white/40 text-xs pointer-events-none">
         {current + 1} / {photos.length}
       </div>
 
       <div
+        className="absolute inset-0"
         style={{
-          position: "absolute",
-          inset: 0,
-          transform: `translateY(${translateY})`,
-          transition: isDragging ? "none" : "transform 0.6s cubic-bezier(0.65, 0, 0.35, 1)",
-          willChange: "transform",
+          opacity,
+          transition: `opacity ${opacity === 0 ? FADE_OUT : FADE_IN}ms ease`,
         }}
       >
-        {photos.map((src, i) => (
-          <div
-            key={i}
-            style={{ position: "absolute", top: `${i * 100}vh`, width: "100%", height: "100vh" }}
-            className="flex items-center justify-center"
-          >
-            <Image
-              src={src}
-              alt={`웨딩 사진 ${i + 1}`}
-              fill
-              className="object-contain"
-              sizes="100vw"
-              draggable={false}
-            />
-          </div>
-        ))}
+        <Image
+          src={photos[current]}
+          alt={`웨딩 사진 ${current + 1}`}
+          fill
+          className="object-contain"
+          sizes="100vw"
+          draggable={false}
+        />
       </div>
     </div>
   );
