@@ -343,7 +343,7 @@ export default function WeddingPage() {
             </div>
             <div className="space-y-1">
               <p className="text-base font-medium text-stone-700 tracking-wider">로프트가든344</p>
-              <p className="text-sm text-stone-400 font-light">서울 양천구 오목로 344 청학빌딩 10층</p>
+              <p className="text-sm text-stone-400 font-light">서울 양천구 오목로 344 청학빌딩 8~10F</p>
             </div>
             <div className="flex justify-center">
               <DDay />
@@ -357,18 +357,18 @@ export default function WeddingPage() {
         <FadeSection>
           <div className="space-y-4">
             <p className="text-[10px] tracking-[0.35em] text-stone-400 text-center">LOCATION</p>
+
+            {/* 약도 */}
             <div className="rounded-2xl overflow-hidden border border-stone-100 shadow-sm">
-              <iframe
-                src="https://maps.google.com/maps?q=서울+양천구+오목로+344+청학빌딩&output=embed&z=16&hl=ko"
-                width="100%"
-                height="280"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="로프트가든344 위치"
+              <Image
+                src={`${BASE_PATH}/LoftGarden344-map.png`}
+                alt="로프트가든344 약도"
+                width={480}
+                height={340}
+                className="w-full h-auto"
               />
             </div>
+
             <div className="flex gap-2">
               <a
                 href="https://map.kakao.com/link/search/서울 양천구 오목로 344 청학빌딩"
@@ -387,17 +387,35 @@ export default function WeddingPage() {
                 네이버지도
               </a>
               <button
-                onClick={() => copyToClipboard("서울 양천구 오목로 344 청학빌딩 10층", "address")}
+                onClick={() => copyToClipboard("서울 양천구 오목로 344 청학빌딩 8~10F", "address")}
                 className="flex-1 py-3 text-center text-xs bg-stone-100 text-stone-600 rounded-xl font-medium hover:bg-stone-200 transition-colors tracking-wide"
               >
                 {copied === "address" ? "복사됨 ✓" : "주소 복사"}
               </button>
             </div>
-            <div className="bg-stone-50 rounded-2xl p-5 space-y-2.5 text-sm text-stone-500 font-light">
-              <p className="text-[10px] font-medium text-stone-400 tracking-[0.2em] mb-3">교통 안내</p>
-              <p>🚇 지하철 5호선 오목교역 2번 출구 도보 5분</p>
-              <p>🚌 버스 605, 606, 640번 오목교 하차</p>
-              <p>🚗 주차 청학빌딩 지하주차장 (2시간 무료)</p>
+
+            <div className="bg-stone-50 rounded-2xl p-5 space-y-4 text-sm font-light">
+              <p className="text-[10px] font-medium text-stone-400 tracking-[0.2em]">교통 안내</p>
+              <div className="space-y-1">
+                <p className="text-[10px] font-medium text-stone-500 tracking-wider">🚇 지하철</p>
+                <p className="text-xs text-stone-400">5호선 오목교역 7번 출구 앞</p>
+              </div>
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-medium text-stone-500 tracking-wider">🚌 버스</p>
+                <div className="space-y-1 text-xs text-stone-400">
+                  <p><span className="text-stone-500">4번 출구</span>  5012, 5616, 6211, 640, 650, 6625, 6628, 6629, 6630, N64</p>
+                  <p><span className="text-stone-500">5번 출구</span>  5012, 6211, 640, 650, 6628, 6629, 6630, 6640A, N64</p>
+                  <p><span className="text-stone-500">6번 출구</span>  6640A</p>
+                  <p><span className="text-stone-500">7번 출구</span>  6624, 6640B</p>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-medium text-stone-500 tracking-wider">🚗 자가용</p>
+                <div className="space-y-1 text-xs text-stone-400">
+                  <p><span className="text-stone-500">전용주차장</span>  청학빌딩 (2시간 무료)</p>
+                  <p><span className="text-stone-500">공영주차장</span>  목동동로 298 (3시간 무료 · 800대)</p>
+                </div>
+              </div>
             </div>
           </div>
         </FadeSection>
