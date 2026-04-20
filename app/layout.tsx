@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-image.jpeg",
-        width: 1200,
-        height: 900,
+        width: 800,
+        height: 1200,
         alt: "김태민 김지현 웨딩 사진",
       },
     ],
