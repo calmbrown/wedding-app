@@ -9,11 +9,24 @@ const notoSerifKR = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://calmbrown.github.io/wedding-app"),
   title: "김태민 ♥ 김지현 결혼합니다",
-  description: "2026년 6월 21일 일요일 오후 3시 30분 로프트가든344",
+  description: "2026년 6월 21일 일요일 오후 3시 30분 · 로프트가든344",
   openGraph: {
     title: "김태민 ♥ 김지현 결혼합니다",
-    description: "2026년 6월 21일 일요일 오후 3시 30분 로프트가든344",
+    description: "2026년 6월 21일 일요일 오후 3시 30분 · 로프트가든344",
+    url: "https://calmbrown.github.io/wedding-app",
+    siteName: "태민 ♥ 지현 청첩장",
+    images: [
+      {
+        url: "/og-image.jpeg",
+        width: 1200,
+        height: 900,
+        alt: "김태민 김지현 웨딩 사진",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
   },
 };
 
