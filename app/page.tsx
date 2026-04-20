@@ -105,7 +105,6 @@ function DDay() {
 }
 
 export default function WeddingPage() {
-  const [lightbox, setLightbox] = useState<number | null>(null);
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -114,17 +113,6 @@ export default function WeddingPage() {
     setCopied(label);
     setTimeout(() => setCopied(null), 2000);
   };
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (lightbox === null) return;
-      if (e.key === "Escape") setLightbox(null);
-      if (e.key === "ArrowRight") setLightbox((p) => (p !== null ? (p + 1) % PHOTOS.length : null));
-      if (e.key === "ArrowLeft") setLightbox((p) => (p !== null ? (p - 1 + PHOTOS.length) % PHOTOS.length : null));
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [lightbox]);
 
   const visiblePhotos = showAllPhotos ? PHOTOS : PHOTOS.slice(0, 9);
 
@@ -270,10 +258,9 @@ export default function WeddingPage() {
             <p className="text-[10px] tracking-[0.35em] text-stone-400 text-center">GALLERY</p>
             <div className="grid grid-cols-3 gap-0.5 rounded-xl overflow-hidden">
               {visiblePhotos.map((src, i) => (
-                <button
+                <div
                   key={i}
-                  onClick={() => setLightbox(i)}
-                  className="aspect-square overflow-hidden relative hover:opacity-90 transition-opacity"
+                  className="aspect-square overflow-hidden relative"
                 >
                   <Image
                     src={src}
@@ -282,7 +269,7 @@ export default function WeddingPage() {
                     className="object-cover"
                     sizes="(max-width: 480px) 33vw, 160px"
                   />
-                </button>
+                </div>
               ))}
             </div>
             {!showAllPhotos && (
@@ -345,47 +332,6 @@ export default function WeddingPage() {
 
       </div>
 
-      {/* ── 라이트박스 ── */}
-      {lightbox !== null && (
-        <div
-          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
-          onClick={() => setLightbox(null)}
-        >
-          <button
-            className="absolute top-5 right-5 text-white/70 hover:text-white w-10 h-10 flex items-center justify-center text-2xl"
-            onClick={() => setLightbox(null)}
-          >
-            ×
-          </button>
-          <button
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-4xl w-12 h-12 flex items-center justify-center"
-            onClick={(e) => { e.stopPropagation(); setLightbox((p) => (p! - 1 + PHOTOS.length) % PHOTOS.length); }}
-          >
-            ‹
-          </button>
-          <div
-            className="relative w-full max-w-sm mx-12 aspect-[3/4]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={PHOTOS[lightbox]}
-              alt={`사진 ${lightbox + 1}`}
-              fill
-              className="object-contain"
-              sizes="100vw"
-            />
-          </div>
-          <button
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-4xl w-12 h-12 flex items-center justify-center"
-            onClick={(e) => { e.stopPropagation(); setLightbox((p) => (p! + 1) % PHOTOS.length); }}
-          >
-            ›
-          </button>
-          <p className="absolute bottom-5 text-white/40 text-xs tracking-widest">
-            {lightbox + 1} / {PHOTOS.length}
-          </p>
-        </div>
-      )}
     </main>
   );
 }
