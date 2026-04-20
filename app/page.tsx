@@ -255,51 +255,46 @@ function RsvpForm() {
   );
 }
 
-function Lightbox({ photos, index, onClose, onPrev, onNext }: {
+function Lightbox({ photos, index, onClose }: {
   photos: string[];
   index: number;
   onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
 }) {
-  const touchStartX = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(index);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") onPrev();
-      if (e.key === "ArrowRight") onNext();
-    };
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollTop = index * window.innerHeight;
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, onPrev, onNext]);
+  }, [onClose]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length === 1) touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (e.touches.length > 1) e.preventDefault();
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(dx) > 50) dx < 0 ? onNext() : onPrev();
-    touchStartX.current = null;
-  };
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const i = Math.round(el.scrollTop / window.innerHeight);
+      setCurrentIndex(Math.min(Math.max(i, 0), photos.length - 1));
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [photos.length]);
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black flex items-center justify-center"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      style={{ touchAction: "pan-x pan-y" }}
+      ref={containerRef}
+      className="fixed inset-0 z-50 bg-black overflow-y-scroll overflow-x-hidden"
+      style={{ touchAction: "pan-y", scrollSnapType: "y mandatory" }}
     >
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 text-white/80 hover:text-white p-2"
+        className="fixed top-4 right-4 z-10 text-white/80 hover:text-white p-2"
         aria-label="닫기"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -307,40 +302,26 @@ function Lightbox({ photos, index, onClose, onPrev, onNext }: {
         </svg>
       </button>
 
-      <button
-        onClick={onPrev}
-        className="absolute left-3 z-10 text-white/60 hover:text-white p-2"
-        aria-label="이전"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>
-
-      <div className="relative w-full h-full" style={{ userSelect: "none" }}>
-        <Image
-          src={photos[index]}
-          alt={`웨딩 사진 ${index + 1}`}
-          fill
-          className="object-contain"
-          sizes="100vw"
-          draggable={false}
-        />
+      <div className="fixed bottom-5 left-0 right-0 z-10 text-center text-white/50 text-xs pointer-events-none">
+        {currentIndex + 1} / {photos.length}
       </div>
 
-      <button
-        onClick={onNext}
-        className="absolute right-3 z-10 text-white/60 hover:text-white p-2"
-        aria-label="다음"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
-
-      <div className="absolute bottom-5 left-0 right-0 text-center text-white/50 text-xs">
-        {index + 1} / {photos.length}
-      </div>
+      {photos.map((src, i) => (
+        <div
+          key={i}
+          className="relative w-full flex items-center justify-center"
+          style={{ height: "100dvh", scrollSnapAlign: "start" }}
+        >
+          <Image
+            src={src}
+            alt={`웨딩 사진 ${i + 1}`}
+            fill
+            className="object-contain"
+            sizes="100vw"
+            draggable={false}
+          />
+        </div>
+      ))}
     </div>
   );
 }
@@ -378,8 +359,6 @@ export default function WeddingPage() {
         photos={PHOTOS}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
-        onPrev={() => setLightboxIndex((i) => (i! - 1 + PHOTOS.length) % PHOTOS.length)}
-        onNext={() => setLightboxIndex((i) => (i! + 1) % PHOTOS.length)}
       />
     )}
     <main className="max-w-[480px] mx-auto bg-white min-h-screen">
