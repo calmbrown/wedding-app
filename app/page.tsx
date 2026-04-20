@@ -261,57 +261,48 @@ function Lightbox({ photos, index, onClose }: {
   onClose: () => void;
 }) {
   const [current, setCurrent] = useState(index);
-  const [opacity, setOpacity] = useState(1);
+  const [dragY, setDragY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const touchStartY = useRef<number | null>(null);
-  const busy = useRef(false);
-
-  const FADE_OUT = 160;
-  const FADE_IN = 220;
-
-  const dismiss = useCallback(() => {
-    if (busy.current) return;
-    busy.current = true;
-    setOpacity(0);
-    setTimeout(onClose, FADE_OUT);
-  }, [onClose]);
-
-  const goTo = useCallback((next: number) => {
-    if (busy.current) return;
-    if (next < 0 || next >= photos.length) { dismiss(); return; }
-    busy.current = true;
-    setOpacity(0);
-    setTimeout(() => {
-      setCurrent(next);
-      setOpacity(1);
-      busy.current = false;
-    }, FADE_OUT);
-  }, [photos.length, dismiss]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") dismiss();
-      if (e.key === "ArrowDown") goTo(current + 1);
-      if (e.key === "ArrowUp") goTo(current - 1);
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowDown") setCurrent((c) => Math.min(c + 1, photos.length - 1));
+      if (e.key === "ArrowUp") setCurrent((c) => Math.max(c - 1, 0));
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [current, goTo, dismiss]);
+  }, [onClose, photos.length]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length !== 1) return;
     touchStartY.current = e.touches[0].clientY;
+    setIsDragging(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (e.touches.length > 1) e.preventDefault();
+    if (e.touches.length > 1) { e.preventDefault(); return; }
+    if (touchStartY.current === null) return;
+    const dy = e.touches[0].clientY - touchStartY.current;
+    const atTop = current === 0 && dy > 0;
+    const atBottom = current === photos.length - 1 && dy < 0;
+    setDragY(atTop || atBottom ? dy * 0.15 : dy);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartY.current === null) return;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
     touchStartY.current = null;
-    if (dy < -80) goTo(current + 1);
-    else if (dy > 80) goTo(current - 1);
+    setIsDragging(false);
+    setDragY(0);
+
+    if (dy < -55) {
+      if (current < photos.length - 1) setCurrent((c) => c + 1);
+      else onClose();
+    } else if (dy > 55 && current > 0) {
+      setCurrent((c) => c - 1);
+    }
   };
 
   return (
@@ -323,7 +314,7 @@ function Lightbox({ photos, index, onClose }: {
       onTouchEnd={handleTouchEnd}
     >
       <button
-        onClick={dismiss}
+        onClick={onClose}
         className="fixed top-4 right-4 z-10 text-white/80 hover:text-white p-2"
         aria-label="닫기"
       >
@@ -337,20 +328,30 @@ function Lightbox({ photos, index, onClose }: {
       </div>
 
       <div
-        className="absolute inset-0"
         style={{
-          opacity,
-          transition: `opacity ${opacity === 0 ? FADE_OUT : FADE_IN}ms ease`,
+          position: "absolute",
+          inset: 0,
+          transform: `translateY(calc(${-current * 100}vh + ${dragY}px))`,
+          transition: isDragging ? "none" : "transform 0.32s cubic-bezier(0.4, 0, 0.2, 1)",
+          willChange: "transform",
         }}
       >
-        <Image
-          src={photos[current]}
-          alt={`웨딩 사진 ${current + 1}`}
-          fill
-          className="object-contain"
-          sizes="100vw"
-          draggable={false}
-        />
+        {photos.map((src, i) => (
+          <div
+            key={i}
+            style={{ position: "absolute", top: `${i * 100}vh`, width: "100%", height: "100vh" }}
+            className="flex items-center justify-center"
+          >
+            <Image
+              src={src}
+              alt={`웨딩 사진 ${i + 1}`}
+              fill
+              className="object-contain"
+              sizes="100vw"
+              draggable={false}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
