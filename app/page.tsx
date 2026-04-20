@@ -527,7 +527,7 @@ export default function WeddingPage() {
             onClick={() => {
               const kakao = (window as any).Kakao;
               if (!kakao?.isInitialized()) return;
-              kakao.Link.sendDefault({
+              kakao.Share.sendDefault({
                 objectType: "feed",
                 content: {
                   title: "김태민 ♥ 김지현 결혼합니다.",
