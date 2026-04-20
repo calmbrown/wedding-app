@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Script from "next/script";
 
 const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
 
@@ -259,6 +258,19 @@ function RsvpForm() {
 export default function WeddingPage() {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js";
+    script.async = true;
+    script.onload = () => {
+      const kakao = (window as any).Kakao;
+      if (kakao && !kakao.isInitialized()) {
+        kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY);
+      }
+    };
+    document.head.appendChild(script);
+  }, []);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -561,15 +573,6 @@ export default function WeddingPage() {
 
       </div>
 
-      <Script
-        src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
-        onLoad={() => {
-          const kakao = (window as any).Kakao;
-          if (kakao && !kakao.isInitialized()) {
-            kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY);
-          }
-        }}
-      />
     </main>
   );
 }
