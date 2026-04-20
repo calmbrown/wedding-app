@@ -5,6 +5,8 @@ import Image from "next/image";
 
 const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
 
+const SCRIPT_URL = process.env.NEXT_PUBLIC_SCRIPT_URL ?? "";
+
 const PHOTOS = Array.from({ length: 30 }, (_, i) => {
   const num = String(i + 1).padStart(3, "0");
   const timestamps: Record<string, string> = {
@@ -101,6 +103,117 @@ function DDay() {
         {days > 0 ? `D-${days}` : days === 0 ? "D-DAY" : `D+${Math.abs(days)}`}
       </span>
     </div>
+  );
+}
+
+function RsvpForm() {
+  const [name, setName] = useState("");
+  const [attending, setAttending] = useState<"yes" | "no" | "">("");
+  const [guests, setGuests] = useState(1);
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !attending) return;
+    setStatus("loading");
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ name, attending, guests: attending === "yes" ? guests : 0, message }),
+      });
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  if (status === "done") {
+    return (
+      <div className="text-center py-8 space-y-2">
+        <p className="text-2xl">🤍</p>
+        <p className="text-sm text-stone-600 font-light">참석 여부가 전달되었습니다.</p>
+        <p className="text-xs text-stone-400">감사합니다, {name}님.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="text-[10px] text-stone-400 tracking-wider block mb-1.5">성함</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="이름을 입력해주세요"
+          required
+          className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-700 placeholder:text-stone-300 outline-none focus:border-stone-400"
+        />
+      </div>
+
+      <div>
+        <label className="text-[10px] text-stone-400 tracking-wider block mb-1.5">참석 여부</label>
+        <div className="grid grid-cols-2 gap-2">
+          {(["yes", "no"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setAttending(v)}
+              className={`py-3 rounded-xl text-sm border transition-colors ${
+                attending === v
+                  ? "bg-stone-800 text-white border-stone-800"
+                  : "bg-white text-stone-500 border-stone-200 hover:bg-stone-50"
+              }`}
+            >
+              {v === "yes" ? "참석합니다" : "불참합니다"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {attending === "yes" && (
+        <div>
+          <label className="text-[10px] text-stone-400 tracking-wider block mb-1.5">참석 인원</label>
+          <div className="flex items-center gap-4 border border-stone-200 rounded-xl px-4 py-3">
+            <button
+              type="button"
+              onClick={() => setGuests((g) => Math.max(1, g - 1))}
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 text-lg leading-none"
+            >−</button>
+            <span className="flex-1 text-center text-sm text-stone-700">{guests}명</span>
+            <button
+              type="button"
+              onClick={() => setGuests((g) => Math.min(10, g + 1))}
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 text-lg leading-none"
+            >+</button>
+          </div>
+        </div>
+      )}
+
+      <div>
+        <label className="text-[10px] text-stone-400 tracking-wider block mb-1.5">축하 메시지 (선택)</label>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="따뜻한 한 마디를 남겨주세요"
+          rows={3}
+          className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-700 placeholder:text-stone-300 outline-none focus:border-stone-400 resize-none"
+        />
+      </div>
+
+      {status === "error" && (
+        <p className="text-xs text-red-400 text-center">전송 중 오류가 발생했습니다. 다시 시도해주세요.</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={!name || !attending || status === "loading"}
+        className="w-full py-3.5 rounded-xl bg-stone-800 text-white text-sm tracking-wider hover:bg-stone-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        {status === "loading" ? "전송 중…" : "전달하기"}
+      </button>
+    </form>
   );
 }
 
@@ -280,6 +393,21 @@ export default function WeddingPage() {
                 사진 더 보기 ({PHOTOS.length - 9}장 더)
               </button>
             )}
+          </div>
+        </FadeSection>
+
+        <Divider />
+
+        {/* ── 참석 여부 ── */}
+        <FadeSection>
+          <div className="space-y-6">
+            <div className="text-center space-y-2">
+              <p className="text-[10px] tracking-[0.35em] text-stone-400">RSVP</p>
+              <p className="text-sm text-stone-500 font-light leading-relaxed">
+                참석 여부를 알려주시면<br />더욱 감사하겠습니다.
+              </p>
+            </div>
+            <RsvpForm />
           </div>
         </FadeSection>
 
