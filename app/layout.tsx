@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "태민 ♥ 지현 청첩장",
     images: [
       {
-        url: "/og-image.jpeg",
+        url: "/og-image-v2.jpeg",
         width: 800,
         height: 1200,
         alt: "김태민 김지현 웨딩 사진",

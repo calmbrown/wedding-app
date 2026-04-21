@@ -645,7 +645,7 @@ export default function WeddingPage() {
                 content: {
                   title: "김태민 ♥ 김지현 결혼합니다.",
                   description: "2026년 6월 21일 (일) 오후 3시 30분 · 로프트가든344",
-                  imageUrl: "https://calmbrown.github.io/wedding-app/og-image.jpeg",
+                  imageUrl: "https://calmbrown.github.io/wedding-app/og-image-v2.jpeg",
                   link: {
                     mobileWebUrl: "https://calmbrown.github.io/wedding-app",
                     webUrl: "https://calmbrown.github.io/wedding-app",
