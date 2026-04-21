@@ -88,9 +88,10 @@ function DDay() {
   const [days, setDays] = useState<number | null>(null);
 
   useEffect(() => {
-    const wedding = new Date("2026-06-21T15:30:00+09:00");
+    const weddingDay = new Date(2026, 5, 21);
     const today = new Date();
-    const diff = Math.ceil((wedding.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    today.setHours(0, 0, 0, 0);
+    const diff = Math.round((weddingDay.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     setDays(diff);
   }, []);
 
