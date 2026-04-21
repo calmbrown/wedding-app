@@ -466,7 +466,7 @@ export default function WeddingPage() {
             </div>
             <div className="space-y-1">
               <p className="text-base font-medium text-stone-700 tracking-wider">로프트가든344</p>
-              <p className="text-sm text-stone-400 font-light">서울 양천구 오목로 344 청학빌딩 8~10F</p>
+              <p className="text-sm text-stone-400 font-light">서울 양천구 오목로 344 청학빌딩 10F</p>
             </div>
             <div className="flex justify-center">
               <DDay />
@@ -510,7 +510,7 @@ export default function WeddingPage() {
                 네이버지도
               </a>
               <button
-                onClick={() => copyToClipboard("서울 양천구 오목로 344 청학빌딩 8~10F", "address")}
+                onClick={() => copyToClipboard("서울 양천구 오목로 344 청학빌딩 10F", "address")}
                 className="flex-1 py-3 text-center text-xs bg-stone-100 text-stone-600 rounded-xl font-medium hover:bg-stone-200 transition-colors tracking-wide"
               >
                 {copied === "address" ? "복사됨 ✓" : "주소 복사"}
@@ -602,7 +602,7 @@ export default function WeddingPage() {
             <div className="space-y-3">
               {[
                 { label: "신랑", name: "김태민", phone: "010-8944-4228" },
-                { label: "신부", name: "김지현", phone: "010-9671-4228" },
+                { label: "신부", name: "김지현", phone: "010-9671-4004" },
               ].map(({ label, name, phone }) => (
                 <div key={label} className="flex items-center justify-between bg-stone-50 rounded-2xl px-5 py-4">
                   <div>
