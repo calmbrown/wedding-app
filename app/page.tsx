@@ -362,6 +362,12 @@ export default function WeddingPage() {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    setIsMobile(/Android|iPhone|iPad|iPod|Mobile/i.test(ua));
+  }, []);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -383,6 +389,21 @@ export default function WeddingPage() {
   };
 
   const visiblePhotos = showAllPhotos ? PHOTOS : PHOTOS.slice(0, 9);
+
+  if (isMobile === false) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 px-8 text-center">
+        <p className="text-3xl mb-6">📱</p>
+        <h1 className="text-lg font-medium text-stone-700 tracking-wider mb-3">모바일에서 열어주세요</h1>
+        <p className="text-sm text-stone-400 font-light leading-relaxed">
+          이 청첩장은 모바일 환경에 최적화되어 있습니다.<br />
+          스마트폰으로 접속해 주세요.
+        </p>
+      </div>
+    );
+  }
+
+  if (isMobile === null) return null;
 
   return (
     <>
