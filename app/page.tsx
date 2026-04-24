@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
@@ -261,6 +261,92 @@ function RsvpForm() {
   );
 }
 
+function GalleryGrid({ photos, onSelect }: { photos: string[]; onSelect: (i: number) => void }) {
+  const p = (i: number, className = "") => {
+    if (i >= photos.length) return null;
+    return (
+      <div key={i} className={`relative overflow-hidden ${className}`}>
+        <button
+          onClick={() => onSelect(i)}
+          className="absolute inset-0 w-full h-full focus:outline-none"
+          aria-label={`웨딩 사진 ${i + 1} 크게 보기`}
+        >
+          <Image src={photos[i]} alt={`웨딩 사진 ${i + 1}`} fill className="object-cover" sizes="(max-width: 480px) 100vw, 480px" />
+        </button>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-0.5 rounded-2xl overflow-hidden">
+      {/* 1. 풀 세로 */}
+      {p(0, "aspect-[3/4] w-full")}
+
+      {/* 2. 2열 */}
+      <div className="grid grid-cols-2 gap-0.5">
+        {p(1, "aspect-[3/4]")}
+        {p(2, "aspect-[3/4]")}
+      </div>
+
+      {/* 3. 모자이크: 큰 왼쪽 + 오른쪽 2장 */}
+      <div className="flex gap-0.5 h-72">
+        {p(3, "flex-[2] h-full")}
+        <div className="flex-1 flex flex-col gap-0.5">
+          {p(4, "flex-1")}
+          {p(5, "flex-1")}
+        </div>
+      </div>
+
+      {/* 4. 풀 세로 */}
+      {p(6, "aspect-[3/4] w-full")}
+
+      {/* 5. 3열 */}
+      <div className="grid grid-cols-3 gap-0.5">
+        {p(7, "aspect-square")}
+        {p(8, "aspect-square")}
+        {p(9, "aspect-square")}
+      </div>
+
+      {/* 6. 모자이크: 왼쪽 2장 + 큰 오른쪽 */}
+      <div className="flex gap-0.5 h-72">
+        <div className="flex-1 flex flex-col gap-0.5">
+          {p(10, "flex-1")}
+          {p(11, "flex-1")}
+        </div>
+        {p(12, "flex-[2] h-full")}
+      </div>
+
+      {/* 7. 2열 */}
+      <div className="grid grid-cols-2 gap-0.5">
+        {p(13, "aspect-[3/4]")}
+        {p(14, "aspect-[3/4]")}
+      </div>
+
+      {/* 8. 풀 가로 */}
+      {p(15, "aspect-[4/3] w-full")}
+
+      {/* 9. 3열 */}
+      <div className="grid grid-cols-3 gap-0.5">
+        {p(16, "aspect-square")}
+        {p(17, "aspect-square")}
+        {p(18, "aspect-square")}
+      </div>
+
+      {/* 10. 2열 */}
+      <div className="grid grid-cols-2 gap-0.5">
+        {p(19, "aspect-[3/4]")}
+        {p(20, "aspect-[3/4]")}
+      </div>
+
+      {/* 11. 풀 세로 */}
+      {p(21, "aspect-[3/4] w-full")}
+
+      {/* 12. 풀 세로 */}
+      {p(22, "aspect-[3/4] w-full")}
+    </div>
+  );
+}
+
 function AccountSection({ copied, onCopy }: { copied: string | null; onCopy: (text: string, label: string) => void }) {
   const [open, setOpen] = useState<"groom" | "bride" | null>(null);
 
@@ -414,7 +500,6 @@ function Lightbox({ photos, index, onClose }: {
 }
 
 export default function WeddingPage() {
-  const [showAllPhotos, setShowAllPhotos] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
@@ -442,8 +527,6 @@ export default function WeddingPage() {
     setCopied(label);
     setTimeout(() => setCopied(null), 2000);
   };
-
-  const visiblePhotos = showAllPhotos ? PHOTOS : PHOTOS.slice(0, 9);
 
   if (isMobile === false) {
     return (
@@ -626,32 +709,7 @@ export default function WeddingPage() {
         <FadeSection>
           <div className="space-y-4">
             <p className="text-[10px] tracking-[0.35em] text-stone-400 text-center">GALLERY</p>
-            <div className="grid grid-cols-3 gap-0.5 rounded-xl overflow-hidden">
-              {visiblePhotos.map((src, i) => (
-                <button
-                  key={i}
-                  onClick={() => setLightboxIndex(i)}
-                  className="aspect-square overflow-hidden relative focus:outline-none"
-                  aria-label={`웨딩 사진 ${i + 1} 크게 보기`}
-                >
-                  <Image
-                    src={src}
-                    alt={`웨딩 사진 ${i + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 480px) 33vw, 160px"
-                  />
-                </button>
-              ))}
-            </div>
-            {!showAllPhotos && (
-              <button
-                onClick={() => setShowAllPhotos(true)}
-                className="w-full py-3 text-xs text-stone-500 border border-stone-200 rounded-xl hover:bg-stone-50 transition-colors tracking-wider"
-              >
-                사진 더 보기 ({PHOTOS.length - 9}장 더)
-              </button>
-            )}
+            <GalleryGrid photos={PHOTOS} onSelect={setLightboxIndex} />
           </div>
         </FadeSection>
 
