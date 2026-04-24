@@ -325,17 +325,17 @@ function GalleryGrid({ photos, onSelect }: { photos: string[]; onSelect: (i: num
       {/* 8. 풀 가로 */}
       {p(15, "aspect-[4/3] w-full")}
 
-      {/* 9. 3열 */}
+      {/* 9. 2열 */}
+      <div className="grid grid-cols-2 gap-0.5">
+        {p(19, "aspect-[3/4]")}
+        {p(20, "aspect-[3/4]")}
+      </div>
+
+      {/* 10. 3열 */}
       <div className="grid grid-cols-3 gap-0.5">
         {p(16, "aspect-square")}
         {p(17, "aspect-square")}
         {p(18, "aspect-square")}
-      </div>
-
-      {/* 10. 2열 */}
-      <div className="grid grid-cols-2 gap-0.5">
-        {p(19, "aspect-[3/4]")}
-        {p(20, "aspect-[3/4]")}
       </div>
 
       {/* 11. 풀 세로 */}
