@@ -7,6 +7,21 @@ const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
 
 const SCRIPT_URL = process.env.NEXT_PUBLIC_SCRIPT_URL ?? "";
 
+const SHOW_ACCOUNTS = true;
+
+const ACCOUNTS = {
+  groom: [
+    { label: "신랑", name: "김태민", bank: "카카오뱅크", number: "3333-000-0000000" },
+    { label: "신랑 부", name: "김학정", bank: "국민은행", number: "000000-00-000000" },
+    { label: "신랑 모", name: "유영임", bank: "신한은행", number: "000-000-000000" },
+  ],
+  bride: [
+    { label: "신부", name: "김지현", bank: "카카오뱅크", number: "3333-000-0000000" },
+    { label: "신부 부", name: "김용섭", bank: "농협은행", number: "000-0000-0000-00" },
+    { label: "신부 모", name: "강외숙", bank: "우리은행", number: "0000-000-000000" },
+  ],
+};
+
 const PHOTOS = [
   "KakaoTalk_Photo_2026-04-24-09-32-25 001.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-27 002.jpeg",
@@ -243,6 +258,56 @@ function RsvpForm() {
         {status === "loading" ? "전송 중…" : "전달하기"}
       </button>
     </form>
+  );
+}
+
+function AccountSection({ copied, onCopy }: { copied: string | null; onCopy: (text: string, label: string) => void }) {
+  const [open, setOpen] = useState<"groom" | "bride" | null>(null);
+
+  return (
+    <div className="space-y-4">
+      <div className="text-center space-y-3">
+        <p className="text-[10px] tracking-[0.35em] text-stone-400">ACCOUNT</p>
+        <p className="text-sm text-stone-400 font-light leading-[2]">
+          함께해 주시는 마음이 가장 큰 선물입니다.<br />
+          별도로 마음을 전하고자 하시는 분께 안내드립니다.
+        </p>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {(["groom", "bride"] as const).map((side) => (
+          <button
+            key={side}
+            onClick={() => setOpen(open === side ? null : side)}
+            className={`py-3 rounded-xl text-sm border transition-colors ${
+              open === side
+                ? "bg-stone-800 text-white border-stone-800"
+                : "bg-white text-stone-500 border-stone-200 hover:bg-stone-50"
+            }`}
+          >
+            {side === "groom" ? "신랑측 계좌" : "신부측 계좌"}
+          </button>
+        ))}
+      </div>
+      {open && (
+        <div className="space-y-2">
+          {ACCOUNTS[open].map((acc) => (
+            <div key={acc.label} className="flex items-center justify-between bg-stone-50 rounded-2xl px-5 py-4">
+              <div>
+                <p className="text-[10px] text-stone-400 tracking-wider mb-0.5">{acc.label}</p>
+                <p className="text-sm font-medium text-stone-700 tracking-wider">{acc.name}</p>
+                <p className="text-xs text-stone-400 font-light mt-0.5">{acc.bank}  {acc.number}</p>
+              </div>
+              <button
+                onClick={() => onCopy(acc.number, `${acc.label}-account`)}
+                className="text-xs text-stone-500 border border-stone-200 bg-white rounded-xl px-3 py-2 hover:bg-stone-100 transition-colors"
+              >
+                {copied === `${acc.label}-account` ? "복사됨 ✓" : "복사"}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -604,6 +669,15 @@ export default function WeddingPage() {
             <RsvpForm />
           </div>
         </FadeSection>
+
+        {SHOW_ACCOUNTS && (
+          <>
+            <Divider />
+            <FadeSection>
+              <AccountSection copied={copied} onCopy={copyToClipboard} />
+            </FadeSection>
+          </>
+        )}
 
         <Divider />
 
