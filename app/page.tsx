@@ -29,7 +29,7 @@ const PHOTOS = [
   "KakaoTalk_Photo_2026-04-24-09-32-29 003.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-27 002.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-31 006.jpeg",
-  "KakaoTalk_Photo_2026-04-24-09-32-31 007.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-32 007.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-36 010.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-33 008.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-34 009.jpeg",
