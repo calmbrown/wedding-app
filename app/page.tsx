@@ -23,10 +23,10 @@ const ACCOUNTS = {
 };
 
 const PHOTOS = [
-  "KakaoTalk_Photo_2026-04-24-09-32-25 001.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-29 003.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-31 005.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-30 004.jpeg",
-  "KakaoTalk_Photo_2026-04-24-09-32-29 003.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-25 001.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-27 002.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-31 006.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-32 007.jpeg",
