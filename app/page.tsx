@@ -35,7 +35,7 @@ const PHOTOS = [
   "KakaoTalk_Photo_2026-04-24-09-32-34 009.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-40 013.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-43 016.jpeg",
-  "KakaoTalk_Photo_2026-04-24-09-32-33 007.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-34 007.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-37 011.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-39 012.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-47 019.jpeg",
