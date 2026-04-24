@@ -36,8 +36,8 @@ const PHOTOS = [
   "KakaoTalk_Photo_2026-04-24-09-32-40 013.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-43 016.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-33 007.jpeg",
-  "KakaoTalk_Photo_2026-04-24-09-32-39 012.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-37 011.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-39 012.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-44 017.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-46 018.jpeg",
   "KakaoTalk_Photo_2026-04-24-09-32-47 019.jpeg",
@@ -327,15 +327,15 @@ function GalleryGrid({ photos, onSelect }: { photos: string[]; onSelect: (i: num
 
       {/* 9. 2열 */}
       <div className="grid grid-cols-2 gap-0.5">
-        {p(19, "aspect-[3/4]")}
-        {p(20, "aspect-[3/4]")}
+        {p(16, "aspect-[3/4]")}
+        {p(17, "aspect-[3/4]")}
       </div>
 
       {/* 10. 3열 */}
       <div className="grid grid-cols-3 gap-0.5">
-        {p(16, "aspect-square")}
-        {p(17, "aspect-square")}
         {p(18, "aspect-square")}
+        {p(19, "aspect-square")}
+        {p(20, "aspect-square")}
       </div>
 
       {/* 11. 풀 세로 */}
