@@ -13,7 +13,7 @@ const ACCOUNTS = {
   groom: [
     { label: "신랑", name: "김태민", bank: "국민은행", number: "743202-04-104005" },
     { label: "신랑 부", name: "김학정", bank: "NH농협은행", number: "302-1891-8135-71" },
-    { label: "신랑 모", name: "유영임", bank: "국민은행", number: "743202-04-078753" },
+    { label: "신랑 모", name: "유영임", bank: "하나은행", number: "229-910376-56707" },
   ],
   bride: [
     { label: "신부", name: "김지현", bank: "우리은행", number: "1002-659-782940" },
