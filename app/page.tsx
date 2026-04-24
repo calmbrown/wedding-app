@@ -7,36 +7,31 @@ const BASE_PATH = process.env.NODE_ENV === "production" ? "/wedding-app" : "";
 
 const SCRIPT_URL = process.env.NEXT_PUBLIC_SCRIPT_URL ?? "";
 
-const PHOTOS = Array.from({ length: 24 }, (_, i) => {
-  const num = String(i + 1).padStart(3, "0");
-  const timestamps: Record<string, string> = {
-    "001": "2026-04-24-09-32-25",
-    "002": "2026-04-24-09-32-27",
-    "003": "2026-04-24-09-32-29",
-    "004": "2026-04-24-09-32-30",
-    "005": "2026-04-24-09-32-31",
-    "006": "2026-04-24-09-32-31",
-    "007": "2026-04-24-09-32-33",
-    "008": "2026-04-24-09-32-33",
-    "009": "2026-04-24-09-32-34",
-    "010": "2026-04-24-09-32-36",
-    "011": "2026-04-24-09-32-37",
-    "012": "2026-04-24-09-32-39",
-    "013": "2026-04-24-09-32-40",
-    "014": "2026-04-24-09-32-41",
-    "015": "2026-04-24-09-32-42",
-    "016": "2026-04-24-09-32-43",
-    "017": "2026-04-24-09-32-44",
-    "018": "2026-04-24-09-32-46",
-    "019": "2026-04-24-09-32-47",
-    "020": "2026-04-24-09-32-47",
-    "021": "2026-04-24-09-32-48",
-    "022": "2026-04-24-09-32-49",
-    "023": "2026-04-24-09-32-50",
-    "024": "2026-04-24-09-32-50",
-  };
-  return `${BASE_PATH}/KakaoTalk_Photo_${timestamps[num]} ${num}.jpeg`;
-});
+const PHOTOS = [
+  "KakaoTalk_Photo_2026-04-24-09-32-25 001.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-27 002.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-29 003.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-30 004.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-31 005.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-31 006.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-33 007.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-33 008.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-34 009.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-36 010.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-37 011.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-39 012.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-40 013.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-43 016.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-44 017.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-46 018.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-47 019.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-47 020.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-48 021.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-49 024.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-50 022.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-51 014.jpeg",
+  "KakaoTalk_Photo_2026-04-24-09-32-52 015.jpeg",
+].map((f) => `${BASE_PATH}/${f}`);
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -413,7 +408,7 @@ export default function WeddingPage() {
       {/* ── 메인 커버 ── */}
       <section className="relative h-screen flex flex-col items-center justify-end pb-16 overflow-hidden">
         <Image
-          src={PHOTOS[14]}
+          src={`${BASE_PATH}/og-image-v3.jpeg`}
           alt="커버 사진"
           fill
           className="object-cover"
