@@ -381,7 +381,7 @@ function AccountSection({ copied, onCopy }: { copied: string | null; onCopy: (te
               <div>
                 <p className="text-[10px] text-stone-400 tracking-wider mb-0.5">{acc.label}</p>
                 <p className="text-sm font-medium text-stone-700 tracking-wider">{acc.name}</p>
-                <p className="text-xs text-stone-400 font-light mt-0.5">{acc.bank}  {acc.number}</p>
+                <p className="text-xs text-stone-500 mt-0.5">{acc.bank}  {acc.number}</p>
               </div>
               <button
                 onClick={() => onCopy(acc.number, `${acc.label}-account`)}
@@ -597,13 +597,13 @@ export default function WeddingPage() {
               <div className="flex justify-center gap-10 text-sm text-stone-600">
                 <div className="text-center">
                   <p className="text-[10px] text-stone-400 tracking-wider mb-2">신랑측</p>
-                  <p className="font-light text-xs text-stone-400 mb-1">김학정 · 유영임의 아들</p>
+                  <p className="text-xs text-stone-500 mb-1">김학정 · 유영임의 아들</p>
                   <p className="text-base font-medium tracking-widest">김 태 민</p>
                 </div>
                 <div className="text-stone-200 self-center text-xl">|</div>
                 <div className="text-center">
                   <p className="text-[10px] text-stone-400 tracking-wider mb-2">신부측</p>
-                  <p className="font-light text-xs text-stone-400 mb-1">김용섭 · 강외숙의 딸</p>
+                  <p className="text-xs text-stone-500 mb-1">김용섭 · 강외숙의 딸</p>
                   <p className="text-base font-medium tracking-widest">김 지 현</p>
                 </div>
               </div>
@@ -752,7 +752,7 @@ export default function WeddingPage() {
                   <div>
                     <p className="text-[10px] text-stone-400 tracking-wider mb-0.5">{label}</p>
                     <p className="text-sm font-medium text-stone-700 tracking-wider">{name}</p>
-                    <p className="text-xs text-stone-400 font-light mt-0.5">{phone}</p>
+                    <p className="text-xs text-stone-500 mt-0.5">{phone}</p>
                   </div>
                   <div className="flex gap-2">
                     <a
